@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: nagashima_ns
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 8090
+    targetPort: 8090
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+  namespace: nagashima_ns
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: nagashima_ns
+        image: 819724587289.dkr.ecr.ap-northeast-1.amazonaws.com/nagashima_repo
+        ports:
+        - containerPort: 8090
